@@ -2,6 +2,8 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import styles from './Header.module.scss'
 import { FaShoppingCart } from 'react-icons/fa'
+import { MdReorder,MdClear } from "react-icons/md";
+import { useState } from 'react';
 
 
 const logo=(
@@ -14,14 +16,44 @@ const logo=(
   </div>
 );
 
+const cart=(
+  <span className={styles.cart}>
+  <Link to='/cart'>
+    Cart
+    <FaShoppingCart size={20}/>
+    <p>0</p>
+  </Link>
+</span>
+);
+
+
+
 
 const Header = () => {
+  const [showMenu, setShowMenu] = useState(false)
+
+  const toggleMenu = () =>{
+    setShowMenu(!showMenu)
+  };
+  const hideMenu = () => {
+    setShowMenu(false)
+  };
+
   return (
     <header>
       <div className={styles.header}>
         {logo }
-        <nav>
-          <ul>
+        <nav className={showMenu ? `${styles["show-nav"]}` :`${styles["hide-nav"]}`}>
+          <div className={showMenu ? `${styles["nav-wrapper"]} ${styles["show-nav-wrapper"]}` : `${styles["nav-wrapper"]}`} 
+          onClick={hideMenu}>
+          </div>
+
+
+          <ul onClick={hideMenu}>
+            <li className={styles["logo-mobile"]}>
+              {logo}
+              <MdClear size={15} color="#fff"onClick={hideMenu}/>
+            </li>
             <li>
               <Link to="/">
                 Home
@@ -29,7 +61,7 @@ const Header = () => {
               
             </li>
             <li>
-              <Link to="/contactus">
+              <Link to="/contact">
                 Contact 
               </Link>
               
@@ -38,21 +70,22 @@ const Header = () => {
 
           </ul>
 
-          <div className={styles["header-right"]}>
+          <div className={styles["header-right"]} onClick={hideMenu}>
             <span className={styles.links}>
               <Link to="/login">Login</Link>
               <Link to="/register">Register</Link>
               <Link to="/order-history">My Orders</Link>
             </span>
-            <span className={styles.cart}>
-              <Link to='/cart'>
-                Cart
-                <FaShoppingCart size={20}/>
-              </Link>
-            </span>
+            {cart}
+           
 
+         </div>
+          
+            </nav>
+          <div className={styles["menu-icon"]}>
+            {cart}
+            <MdReorder size={28} onClick={toggleMenu} />
           </div>
-          </nav>
         
      
       </div>
