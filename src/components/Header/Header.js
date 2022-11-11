@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link,NavLink } from 'react-router-dom'
 import styles from './Header.module.scss'
 import { FaShoppingCart } from 'react-icons/fa'
 import { MdReorder,MdClear } from "react-icons/md";
@@ -24,6 +24,10 @@ const cart=(
     <p>0</p>
   </Link>
 </span>
+);
+const activeLink=(
+  (({ isActive} ) => 
+  isActive ? `${styles.active}` : "")
 );
 
 
@@ -55,15 +59,18 @@ const Header = () => {
               <MdClear size={15} color="#fff"onClick={hideMenu}/>
             </li>
             <li>
-              <Link to="/">
+              <NavLink to="/" 
+              className={activeLink}>
                 Home
-              </Link>
+              </NavLink>
               
             </li>
             <li>
-              <Link to="/contact">
+              <NavLink to="/contact"
+              className={activeLink}
+              >
                 Contact 
-              </Link>
+              </NavLink>
               
             </li>
 
@@ -72,9 +79,9 @@ const Header = () => {
 
           <div className={styles["header-right"]} onClick={hideMenu}>
             <span className={styles.links}>
-              <Link to="/login">Login</Link>
-              <Link to="/register">Register</Link>
-              <Link to="/order-history">My Orders</Link>
+              <NavLink to="/login" className={activeLink}>Login</NavLink>
+              <NavLink to="/register" className={activeLink}>Register</NavLink>
+              <NavLink to="/order-history" className={activeLink}>My Orders</NavLink>
             </span>
             {cart}
            
