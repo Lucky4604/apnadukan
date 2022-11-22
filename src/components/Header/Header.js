@@ -1,10 +1,12 @@
-import React from 'react'
-import { Link,NavLink } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Link,NavLink, useNavigate } from 'react-router-dom'
 import styles from './Header.module.scss'
-import { FaShoppingCart } from 'react-icons/fa'
+import { FaShoppingCart, FaUserCircle } from 'react-icons/fa'
 import { MdReorder,MdClear } from "react-icons/md";
 import { useState } from 'react';
-
+import { auth } from '../firebase/Config';
+import { onAuthStateChanged, signOut} from "firebase/auth";
+import { toast } from 'react-toastify';
 
 const logo=(
   <div className={styles.logo}>
@@ -35,9 +37,37 @@ const activeLink=(
 
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false)
+  const [displayName, setDisplayName] = useState("")
+  const navigate=useNavigate();
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+       
+        const uid = user.uid;
+        console.log(user.displayName);
+        setDisplayName(user.displayName);
+        
+      } else {
+        setDisplayName("");
+        
+      }
+    });
+  
+    
+  }, [])
+  
 
   const toggleMenu = () =>{
     setShowMenu(!showMenu)
+  };
+  const logoutUser=()=>{
+    signOut(auth).then(() => {
+      toast.success("Logout Successful")
+      navigate("/")
+    }).catch((error) => {
+      toast.error(error.message)
+    });
+
   };
   const hideMenu = () => {
     setShowMenu(false)
@@ -80,8 +110,10 @@ const Header = () => {
           <div className={styles["header-right"]} onClick={hideMenu}>
             <span className={styles.links}>
               <NavLink to="/login" className={activeLink}>Login</NavLink>
+              <a href='#'><FaUserCircle size={16} /> Hi, {displayName}</a>
               <NavLink to="/register" className={activeLink}>Register</NavLink>
               <NavLink to="/order-history" className={activeLink}>My Orders</NavLink>
+              <NavLink to="/" onClick={logoutUser}>Logout</NavLink>
             </span>
             {cart}
            

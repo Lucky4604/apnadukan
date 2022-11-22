@@ -7,6 +7,8 @@ import Register from './components/pages/auth/Register'
 import Contact from './components/pages/contactus/Contact'
 import Home from './components/pages/home/Home'
 import Reset from './components/pages/auth/Reset'
+import { ToastContainer ,toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 
 
 
@@ -17,6 +19,7 @@ const App = () => {
   return (
     <> 
     <BrowserRouter>
+    <ToastContainer />
     <Header/>
       <Routes>
         <Route path='/' element={<Home />}/>

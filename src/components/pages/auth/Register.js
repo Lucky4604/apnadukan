@@ -3,10 +3,10 @@ import styles from './auth.module.scss'
 import registerImg from '../../assets/register.jpg'
 import Card from '../../card/Card';
 import { Link, Navigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../firebase/config';
+import {  createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from '../../firebase/Config';
+import { ToastContainer ,toast} from 'react-toastify';
+
 
 
 
@@ -23,7 +23,7 @@ const Register = () => {
     }
     setIsLoader(true)
    
-
+    
     createUserWithEmailAndPassword(auth, email, password)
   .then((userCredential) => {
     const user = userCredential.user;
