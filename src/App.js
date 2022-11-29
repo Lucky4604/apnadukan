@@ -10,11 +10,6 @@ import Reset from './components/pages/auth/Reset'
 import { ToastContainer ,toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 
-
-
-
-
-
 const App = () => {
   return (
     <> 
