@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Link,NavLink, useNavigate } from 'react-router-dom'
 import styles from './Header.module.scss'
-import { FaShoppingCart, FaUserCircle } from 'react-icons/fa'
+import {  FaUserCircle } from 'react-icons/fa'
 import { MdReorder,MdClear } from "react-icons/md";
 import { useState } from 'react';
 import { auth } from '../firebase/Config';
@@ -24,15 +24,7 @@ const logo=(
   </div>
 );
 
-const cart=(
-  <span className={styles.cart}>
-  <Link to='/cart'>
-    Cart
-    <FaShoppingCart size={20}/>
-    <p>0</p>
-  </Link>
-</span>
-);
+
 const activeLink=(
   (({ isActive} ) => 
   isActive ? `${styles.active}` : "")
@@ -117,10 +109,10 @@ const Header = () => {
               
             </li>
             <li>
-              <NavLink to="/contact"
+              <NavLink to="/onecompiler"
               className={activeLink}
               >
-                Contact 
+                Compiler
               </NavLink>
               
             </li>
@@ -143,14 +135,13 @@ const Header = () => {
               <NavLink to="/" onClick={logoutUser}>Logout</NavLink>
               </ShowOnLogin>
             </span>
-            {cart}
            
 
          </div>
           
             </nav>
           <div className={styles["menu-icon"]}>
-            {cart}
+            
             <MdReorder size={28} onClick={toggleMenu} />
           </div>
         
