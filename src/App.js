@@ -4,7 +4,7 @@ import Footer from './components/Footer/Footer'
 import Header from './components/Header/Header'
 import Login from './components/pages/auth/Login'
 import Register from './components/pages/auth/Register'
-import OnlineCompiler from './components/pages/contactus/OnlineCompiler'
+import Contact from './components/pages/contactus/Contact'
 import Home from './components/pages/home/Home'
 import Reset from './components/pages/auth/Reset'
 import { ToastContainer ,toast} from 'react-toastify';
@@ -18,7 +18,7 @@ const App = () => {
     <Header/>
       <Routes>
         <Route path='/' element={<Home />}/>
-        <Route path='/onecompiler' element={< OnlineCompiler/>}/>
+        <Route path='/contact' element={< Contact/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path='/register' element={<Register/>}/>
         <Route path='/reset' element={<Reset/>}/>

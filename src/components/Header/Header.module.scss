@@ -25,10 +25,10 @@
   
     .logo a h2 {
       width: 25%;
-      color: #fff;
+      color:  #0073E7;
       cursor: pointer;
       span {
-        color: #0073E7;
+        color: #fff;
       }
     }
   
@@ -68,7 +68,7 @@
             color: #0073E7;
         }
         &.active {
-          color: var(--color-danger);
+          color: #0073E7;
         }
         p {
           position: absolute;
@@ -93,7 +93,7 @@
           color: #0073E7;
         }
         &.active {
-          color: var(--color-danger);
+          color: #0073E7;
         }
       }
     }
@@ -216,7 +216,7 @@
   
   .active {
     position: relative;
-    color: var(--color-danger);
+    color: #0073E7;
   }
   
   .active::after {

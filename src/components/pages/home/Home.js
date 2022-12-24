@@ -1,11 +1,17 @@
 import React from 'react'
-import './Home.module.scss'
+import AdminOnlyRoute from '../../adminOnlyRoute/AdminOnlyRoute'
+import Slider from '../../slider/Slider'
+import styles from './Home.module.scss'
 
 const Home = () => {
   return (
-    <div className='home-container'> 
-        <p>this is a coding web site</p>
-    </div>
+    <div>
+    
+       {/*< Slider/>*/}
+       <h1> Home Page</h1>
+       
+       </div>
+       
   )
 }
 

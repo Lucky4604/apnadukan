@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Link,NavLink, useNavigate } from 'react-router-dom'
 import styles from './Header.module.scss'
-import {  FaUserCircle } from 'react-icons/fa'
+import {  FaUserCircle ,FaShoppingCart,FaTimes} from 'react-icons/fa'
 import { MdReorder,MdClear } from "react-icons/md";
 import { useState } from 'react';
 import { auth } from '../firebase/Config';
@@ -10,6 +10,8 @@ import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { REMOVE_ACTIVE_USER, SET_ACTIVE_USER } from '../Redux/slice/authSlice';
 import ShowOnLogin,  { ShowOnLogout } from '../hiden/Hiden';
+import AdminOnlyRoute from '../adminOnlyRoute/AdminOnlyRoute';
+
 
 
 
@@ -36,6 +38,7 @@ const activeLink=(
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false)
   const [displayName, setDisplayName] = useState("")
+ 
   const navigate=useNavigate();
 
   const dispatch=useDispatch()
@@ -85,6 +88,15 @@ const Header = () => {
   const hideMenu = () => {
     setShowMenu(false)
   };
+  const cart = (
+    <span className={styles.cart}>
+      <Link to="/cart">
+        Cart
+        <FaShoppingCart size={20} />
+       <p> 0</p>
+      </Link>
+    </span>
+  );
 
   return (
     <header>
@@ -102,6 +114,13 @@ const Header = () => {
               <MdClear size={15} color="#fff"onClick={hideMenu}/>
             </li>
             <li>
+              <AdminOnlyRoute>
+                {" "}
+              <button className='--btn --btn-primary'> Admin</button>
+              </AdminOnlyRoute>
+             
+            </li>
+            <li>
               <NavLink to="/" 
               className={activeLink}>
                 Home
@@ -109,10 +128,10 @@ const Header = () => {
               
             </li>
             <li>
-              <NavLink to="/onecompiler"
+              <NavLink to="/contact"
               className={activeLink}
               >
-                Compiler
+               Contact
               </NavLink>
               
             </li>
@@ -135,12 +154,15 @@ const Header = () => {
               <NavLink to="/" onClick={logoutUser}>Logout</NavLink>
               </ShowOnLogin>
             </span>
+            { cart}
+            
            
 
          </div>
           
             </nav>
           <div className={styles["menu-icon"]}>
+          {cart}
             
             <MdReorder size={28} onClick={toggleMenu} />
           </div>
