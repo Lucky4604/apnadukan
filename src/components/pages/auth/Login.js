@@ -58,7 +58,7 @@ const signInWithGoogle =()=>{
         <img src={loginImg}
          alt="Login " width={400} />
       </div>
-      <Card>
+      <Card >
    
       
       <div className={styles.form}>

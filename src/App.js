@@ -9,6 +9,8 @@ import Home from './components/pages/home/Home'
 import Reset from './components/pages/auth/Reset'
 import { ToastContainer ,toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
+import Admin from './components/pages/admin/Admin'
+import AdminOnlyRoute from './components/adminOnlyRoute/AdminOnlyRoute'
 
 const App = () => {
   return (
@@ -23,6 +25,12 @@ const App = () => {
         <Route path='/register' element={<Register/>}/>
         <Route path='/reset' element={<Reset/>}/>
 
+        <Route path='/admin/*'
+         element={<AdminOnlyRoute>
+          <Admin/>
+          </AdminOnlyRoute>
+        }
+        />
         
          </Routes>
 

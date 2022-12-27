@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { REMOVE_ACTIVE_USER, SET_ACTIVE_USER } from '../Redux/slice/authSlice';
 import ShowOnLogin,  { ShowOnLogout } from '../hiden/Hiden';
-import AdminOnlyRoute from '../adminOnlyRoute/AdminOnlyRoute';
+import AdminOnlyRoute, { AdminOnlyLink } from '../adminOnlyRoute/AdminOnlyRoute';
 
 
 
@@ -99,8 +99,8 @@ const Header = () => {
   );
 
   return (
-    <header>
-      <div className={styles.header}>
+    <header >
+      <div className={styles.header}  >
         {logo }
         <nav className={showMenu ? `${styles["show-nav"]}` :`${styles["hide-nav"]}`}>
           <div className={showMenu ? `${styles["nav-wrapper"]} ${styles["show-nav-wrapper"]}` : `${styles["nav-wrapper"]}`} 
@@ -114,10 +114,12 @@ const Header = () => {
               <MdClear size={15} color="#fff"onClick={hideMenu}/>
             </li>
             <li>
-              <AdminOnlyRoute>
-                {" "}
+              <AdminOnlyLink>
+                <Link to="/admin/home">
+             
               <button className='--btn --btn-primary'> Admin</button>
-              </AdminOnlyRoute>
+              </Link>
+              </AdminOnlyLink>
              
             </li>
             <li>
