@@ -1,8 +1,10 @@
-import { ref, uploadBytesResumable } from 'firebase/storage';
+import { addDoc, collection, Timestamp } from 'firebase/firestore';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import React from 'react'
 import { useState } from 'react'
+import { toast } from 'react-toastify';
 import Card from '../../card/Card'
-import { storage } from '../../firebase/Config';
+import { db, storage } from '../../firebase/Config';
 import styles from './AddProduct.module.scss'
 
 const categories = [
@@ -19,8 +21,9 @@ const AddProduct = () => {
     price: 0,
     category: " ",
     brand: " ",
-    description: " ",
-  })
+    desc: " ",
+  });
+  const [uploadProgress, setUploadProgress] = useState(0)
   const handleChangeInput=(e)=>{
     const {name,value}=e.target
       setProduct({...product, [name]:value})
@@ -33,10 +36,46 @@ const AddProduct = () => {
    const storageRef = ref(storage, `apnaDukan/${Date.now()}${file.name}`);
    const uploadTask = uploadBytesResumable(storageRef, file);
  
+
+
+   uploadTask.on('state_changed', 
+  (snapshot) => {
+    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+    setUploadProgress(progress)
+   
+  }, 
+  (error) => {
+    toast.error(error.message)
+  }, 
+  () => {
+ 
+    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+      setProduct({...product,imageUrl:downloadURL})
+      toast.success("Image Uploaded Successfully")
+    });
+  }
+);
   }
   const addProduct=(e)=>{
     e.preventDefault();
     console.log(product)
+    try{
+      const docRef =  addDoc(collection(db, "cities"), {
+        name: product.name,
+        imageUrl:product.imageUrl,
+        price: Number(product.price),
+        category: product.category,
+        brand: product.brand,
+        desc: product.desc,
+        createdAt:Timestamp.now().toDate()
+       
+      });
+      toast.success("Product Uploaded Successfully")
+
+    }catch(error){
+      toast.error(error.message)
+
+    }
   }
   return (
     <div className={styles.product}>
@@ -54,20 +93,28 @@ const AddProduct = () => {
             />
            <label>Product Image:</label>
            <Card cardClass={styles.group}>
+           {uploadProgress===0? null :(
             <div className={styles.progress}>
-              <div className={styles["progress-bar"]} styles={{width: "50%"}}>
-                
-                Uploading 50%
-              </div>
+            <div className={styles["progress-bar"]} styles={{width: `${uploadProgress}%`}}>
+             {uploadProgress <100 ? `Uploading ${uploadProgress}`: `Upload Complete ${uploadProgress}%`}
             </div>
+          </div>
+          
+          )}
+          
+            
             <input type="file" accept="image/*"
             placeholder="Product Image" name="image"
             onChange={(e)=>handleChangeImage(e)}
             />
-            <input type="text"
-             //required
-             placeholder='Image Url' 
-             name='imageUrl' value={product.imageUrl} disabled/>
+            {product.imageUrl===""? null :(
+               <input type="text"
+               //required
+               placeholder='Image Url' 
+               name='imageUrl' value={product.imageUrl} disabled/>
+            
+            )}
+           
 
            </Card>
            <label>Product Price:</label>

@@ -10,7 +10,7 @@ import Reset from './components/pages/auth/Reset'
 import { ToastContainer ,toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 import Admin from './components/pages/admin/Admin'
-import AdminOnlyRoute from './components/adminOnlyRoute/AdminOnlyRoute'
+import AdminOnlyRoute, { AdminOnlyLink } from './components/adminOnlyRoute/AdminOnlyRoute'
 
 const App = () => {
   return (
