@@ -2,10 +2,12 @@ import { addDoc, collection, Timestamp } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import React from 'react'
 import { useState } from 'react'
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Card from '../../card/Card'
 import { db, storage } from '../../firebase/Config';
 import styles from './AddProduct.module.scss'
+
 
 const categories = [
   { id: 1, name: "Laptop" },
@@ -15,13 +17,15 @@ const categories = [
 ];
 
 const AddProduct = () => {
+  const {id}=useParams();
+  console.log(id)
   const [product, setProduct] = useState({
-    name :" ",
-    imageUrl:" ",
+    name :"",
+    imageUrl:"",
     price: 0,
-    category: " ",
-    brand: " ",
-    desc: " ",
+    category: "",
+    brand: "",
+    desc: "",
   });
   const [uploadProgress, setUploadProgress] = useState(0)
   const handleChangeInput=(e)=>{

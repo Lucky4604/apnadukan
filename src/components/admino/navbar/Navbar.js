@@ -14,7 +14,7 @@ const Navbar = () => {
   const userName=useSelector(selectUserName)
   return (
     <div className={styles.navbar}>
-      <div className={styles.user} style={{background:"rgb(131,58,180)",background:"linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%)"}}>
+      <div className={styles.user} style={{background:"rgb(131,58,180)", background:"linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%)"}}>
         <FaUserCircle size={40} color="#fff"/>
        <h4> {userName} </h4> 
       </div>
@@ -31,7 +31,7 @@ const Navbar = () => {
             </NavLink>
           </li>
           <li>
-            <NavLink to="/admin/add-product" className={activeLink}>
+            <NavLink to="/admin/add-product/ADD" className={activeLink}>
                Add Product
             </NavLink>
           </li>
