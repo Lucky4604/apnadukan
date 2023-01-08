@@ -11,6 +11,7 @@ import { ToastContainer ,toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 import Admin from './components/pages/admin/Admin'
 import AdminOnlyRoute, { AdminOnlyLink } from './components/adminOnlyRoute/AdminOnlyRoute'
+import ProductDetails from './components/admino/product/productDetails/ProductDetails'
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
           </AdminOnlyRoute>
         }
         />
+          <Route path='/product-details/:id' element={<ProductDetails/>}/>
         
          </Routes>
 

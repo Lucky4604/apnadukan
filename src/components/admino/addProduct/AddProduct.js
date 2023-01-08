@@ -1,12 +1,16 @@
-import { addDoc, collection, Timestamp } from 'firebase/firestore';
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { addDoc, collection, doc, setDoc, Timestamp } from 'firebase/firestore';
+import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import React from 'react'
 import { useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Card from '../../card/Card'
 import { db, storage } from '../../firebase/Config';
+import { selectProducts } from '../../Redux/slice/productSlice';
 import styles from './AddProduct.module.scss'
+
+
 
 
 const categories = [
@@ -15,19 +19,45 @@ const categories = [
   { id: 3, name: "Fashion" },
   { id: 4, name: "Phone" },
 ];
+const initialState={
+  name :"",
+  imageUrl:"",
+  price: 0,
+  category: "",
+  brand: "",
+  desc: "",
+}
+
+
 
 const AddProduct = () => {
   const {id}=useParams();
-  console.log(id)
-  const [product, setProduct] = useState({
-    name :"",
-    imageUrl:"",
-    price: 0,
-    category: "",
-    brand: "",
-    desc: "",
+  const products=useSelector(selectProducts)
+ const productEdit=products.find((item)=>item.id===id)
+ console.log(productEdit)
+  
+  const [product, setProduct] = useState(()=>{
+    const newState=detectForm(id,
+      {...initialState},
+      productEdit
+      )
+      return newState
   });
+
   const [uploadProgress, setUploadProgress] = useState(0)
+  const navigate=useNavigate();
+  
+
+
+  function detectForm(id,f1,f2){
+    if(id==="ADD"){
+      return f1;
+    }else{
+      return f2;
+    }
+  }
+
+
   const handleChangeInput=(e)=>{
     const {name,value}=e.target
       setProduct({...product, [name]:value})
@@ -75,17 +105,48 @@ const AddProduct = () => {
        
       });
       toast.success("Product Uploaded Successfully")
+      
 
     }catch(error){
       toast.error(error.message)
 
     }
   }
+  const editProduct=(e)=>{
+    e.preventDefault();
+    if(product.imageUrl!==productEdit.imageUrl){
+      const storageRef = ref(storage, productEdit.imageUrl);
+     deleteObject(storageRef)
+
+
+    }
+
+    try{
+       setDoc(doc(db, "cities", id), {
+        name: product.name,
+        imageUrl:product.imageUrl,
+        price: Number(product.price),
+        category: product.category,
+        brand: product.brand,
+        desc: product.desc,
+        createdAt:productEdit.createdAt,
+        editedAt:Timestamp.now().toDate()
+        
+      });
+      toast.success("Product Edited Succesfully")
+     
+      navigate("/admin/all-products")
+
+    }catch(error){
+      toast.error(error.message)
+    }
+  }
+  
   return (
     <div className={styles.product}>
-      <h1>Add New Product</h1>
+      <h2>{detectForm(id,"Add New Product","Edit product")}</h2>
       <Card cardClass={styles.Card}>
-        <form onSubmit={addProduct} >
+        <form onSubmit={detectForm(id,addProduct,editProduct)} >
         <label>Product Name:</label>
         <input
               type="text"
@@ -168,7 +229,7 @@ const AddProduct = () => {
               rows="10"
             ></textarea>
             <button className="--btn --btn-primary">
-              Submit
+              {detectForm(id,"Save Product","Edit Product")}
             </button>
            </form>
       </Card>
