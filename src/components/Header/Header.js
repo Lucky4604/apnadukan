@@ -7,10 +7,12 @@ import { useState } from 'react';
 import { auth } from '../firebase/Config';
 import { onAuthStateChanged, signOut} from "firebase/auth";
 import { toast } from 'react-toastify';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { REMOVE_ACTIVE_USER, SET_ACTIVE_USER } from '../Redux/slice/authSlice';
 import ShowOnLogin,  { ShowOnLogout } from '../hiden/Hiden';
 import AdminOnlyRoute, { AdminOnlyLink } from '../adminOnlyRoute/AdminOnlyRoute';
+import { CALCULATE_TOTAL_QUANTITY, selectCartTotalQuantity } from '../Redux/slice/cartSlice';
+
 
 
 
@@ -38,10 +40,29 @@ const activeLink=(
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false)
   const [displayName, setDisplayName] = useState("")
+  const [scrollPage, setScrollPage] = useState(false);
+  const cartTotalQuantity=useSelector(selectCartTotalQuantity)
+
+  useEffect(() => {
+    dispatch(CALCULATE_TOTAL_QUANTITY())
+  }, [])
+  
+  
  
   const navigate=useNavigate();
 
   const dispatch=useDispatch()
+  
+  const fixedNav=()=>{
+  if(window.scrollY  >50){
+    setScrollPage(true)
+  }else{
+    setScrollPage(false)
+  }
+  
+
+  };
+  window.addEventListener("scroll",fixedNav)
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -93,13 +114,13 @@ const Header = () => {
       <Link to="/cart">
         Cart
         <FaShoppingCart size={20} />
-       <p> 0</p>
+       <p>{cartTotalQuantity}</p>
       </Link>
     </span>
   );
 
   return (
-    <header >
+    <header className={scrollPage ? `${styles.fixed}` : null} >
       <div className={styles.header}  >
         {logo }
         <nav className={showMenu ? `${styles["show-nav"]}` :`${styles["hide-nav"]}`}>

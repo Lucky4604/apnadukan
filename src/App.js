@@ -12,6 +12,10 @@ import 'react-toastify/dist/ReactToastify.css'
 import Admin from './components/pages/admin/Admin'
 import AdminOnlyRoute, { AdminOnlyLink } from './components/adminOnlyRoute/AdminOnlyRoute'
 import ProductDetails from './components/admino/product/productDetails/ProductDetails'
+import Cart from './components/pages/cart/Cart'
+import CheckoutDetails from './components/pages/checkout/CheckoutDetails'
+import Checkout from './components/pages/checkout/Checkout'
+import CheckoutSuccess from './components/pages/checkout/CheckoutSuccess'
 
 const App = () => {
   return (
@@ -33,6 +37,10 @@ const App = () => {
         }
         />
           <Route path='/product-details/:id' element={<ProductDetails/>}/>
+          <Route path='/cart' element={<Cart/>}/>
+          <Route path="/checkout-details" element={<CheckoutDetails/>}/>
+          <Route path="/checkout" element={<Checkout/>}/>
+          <Route path="checkout-success" element={<CheckoutSuccess/>}/>
         
          </Routes>
 
