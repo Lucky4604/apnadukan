@@ -1,90 +1,72 @@
-import { Elements } from '@stripe/react-stripe-js'
-import { loadStripe } from '@stripe/stripe-js'
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
-import CheckoutForm from '../../checkoutForm/CheckoutForm';
-import { selectEmail } from '../../Redux/slice/authSlice';
-import { CALCULATE_SUBTOTAL, CALCULATE_TOTAL_QUANTITY, selectCartItems, selectCartTotalAmount } from '../../Redux/slice/cartSlice';
-import { selectBillingAddress, selectShippingAddress } from '../../Redux/slice/checkoutSlice';
+import React, { useState, useEffect } from "react";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import { useDispatch, useSelector } from "react-redux";
+import { CALCULATE_SUBTOTAL, CALCULATE_TOTAL_QUANTITY, selectCartItems, selectCartTotalAmount } from "../../Redux/slice/cartSlice";
+import { selectEmail } from "../../Redux/slice/authSlice";
+import { selectBillingAddress, selectShippingAddress } from "../../Redux/slice/checkoutSlice";
+import { toast } from "react-toastify";
+import CheckoutForm from "../../checkoutForm/CheckoutForm";
 
 
-
-
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PK);
+const stripePromise = loadStripe("pk_test_51MQwPXSGt4ARocIAIfnAFvFcjVSYHj1xtkD9rgWp3RO4PzQQf3Rs3kJCYYo3xbM5i8hJpgRy3e15lECFxKP7o02h00BFVVnYPp");
 
 const Checkout = () => {
-    const [message, setMessage] = useState("Initializing checkout...");
+    const [message, setMessage] = useState("Initializing Checkout");
     const [clientSecret, setClientSecret] = useState("");
 
-    const cartItems = useSelector(selectCartItems);
-    const totalAmount = useSelector(selectCartTotalAmount);
-    const customerEmail = useSelector(selectEmail);
+    const item = useSelector(selectCartItems);
+    const amount = useSelector(selectCartTotalAmount);
+    const email = useSelector(selectEmail);
+    const shipping = useSelector(selectShippingAddress);
+    const billing = useSelector(selectBillingAddress);
 
-    const shippingAddress = useSelector(selectShippingAddress);
-    const billingAddress = useSelector(selectBillingAddress);
-
-    const dispatch=useDispatch()
-    useEffect(() => {
-        dispatch(CALCULATE_SUBTOTAL());
-        dispatch(CALCULATE_TOTAL_QUANTITY());
-      }, [dispatch, cartItems]);
-    
-
-    
-
-      const description=`ApnaDukan Payment: email: ${customerEmail},Amount: ${totalAmount}`
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        // http://localhost:4242/create-payment-intent
+        dispatch(CALCULATE_SUBTOTAL);
+        dispatch(CALCULATE_TOTAL_QUANTITY);
+    }, [dispatch, item]);
+
+    useEffect(() => {
         // Create PaymentIntent as soon as the page loads
-        fetch("http://localhost:4242/create-payment-intent", {
+        fetch("/http://localhost:4242/create-payment-intent", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            items: cartItems,
-            userEmail: customerEmail,
-            shipping: shippingAddress,
-            billing: billingAddress,
-            description,
-          }),
+             items: item,
+             emails:email,
+             shippingDetails:shipping,
+             billingDetails:billing,
+             }),
         })
-        .then((res) => {
-            if (res.ok) {
-              return res.json();
-            }
-            return res.json().then((json) => Promise.reject(json));
-          })
-          .then((data) => {
-            setClientSecret(data.clientSecret);
-          })
-          .catch((error) => {
-            setMessage("Failed to initialize checkout");
-            toast.error("Something went wrong!!!");
-          });
+          .then((res) => res.json())
+          
+          .then((data) => setClientSecret(data.clientSecret));
       }, []);
+    
       const appearance = {
-        theme: "stripe",
+        theme: 'stripe',
       };
       const options = {
         clientSecret,
         appearance,
       };
+    return (
+        <>
+            <section>
+                <div className="container">
+                    {!clientSecret && <h3>{message}</h3>}
+                    
 
+        </div>
+    </section>
+    {clientSecret && (
+        <Elements options={options} stripe={stripePromise}>
+          <CheckoutForm />
+        </Elements>
+      )}
     
-
-  return (
-    <>
-      <section>
-        <div className="container">
-            {!clientSecret && <h3>{message}</h3>}
-            </div>
-      </section>
-      {/* {clientSecret && (
-        // <Elements options={options} stripe={stripePromise}>
-        //   <CheckoutForm/>
-        // </Elements>
-      )} */}
     </>
   )
 }

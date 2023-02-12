@@ -16,6 +16,10 @@ import Cart from './components/pages/cart/Cart'
 import CheckoutDetails from './components/pages/checkout/CheckoutDetails'
 import Checkout from './components/pages/checkout/Checkout'
 import CheckoutSuccess from './components/pages/checkout/CheckoutSuccess'
+import CheckoutForm from './components/checkoutForm/CheckoutForm'
+
+
+
 
 const App = () => {
   return (
@@ -40,7 +44,10 @@ const App = () => {
           <Route path='/cart' element={<Cart/>}/>
           <Route path="/checkout-details" element={<CheckoutDetails/>}/>
           <Route path="/checkout" element={<Checkout/>}/>
-          <Route path="checkout-success" element={<CheckoutSuccess/>}/>
+          <Route path="/checkout-form" element={<CheckoutForm/>}/>
+          <Route path="/checkout-success" element={<CheckoutSuccess/>}/>
+          
+          
         
          </Routes>
 
